@@ -35,5 +35,5 @@ In the modern digital health landscape, patients struggle with fragmented medica
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/YourUsername/Neuro-X-Vision.git](https://github.com/YourUsername/Neuro-X-Vision.git)
+   git clone [https://github.com/YourUsername/Neuro-X-Vision.git](https://github.com/EddlaEdwin/Neuro-X-Vision.git)
    cd Neuro-X-Vision
