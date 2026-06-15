@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuro X Vision - Health Repository</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="main">
+    <div class="top-bar">
+        <div class="logo" onclick="showHome()">
+            <span class="logo-text-blue">Neuro</span>
+            <div class="logo-icon">X</div>
+            <span class="logo-text-blue">Vision</span>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-bar" id="search-input" placeholder="Search records or specialties..." onkeyup="filterRecords()">
+        </div>
+        <button class="user-profile-btn" onclick="openProfileModal()">
+            <div class="avatar" id="nav-avatar">U</div>
+            <span id="nav-username">Sign In</span>
+        </button>
+    </div>
+
+    <div id="home-view">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-title">Total Records</span>
+                <span class="stat-value" id="stat-total">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-title">Age</span>
+                <span class="stat-value" id="stat-age">--</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-title">Sex</span>
+                <span class="stat-value" id="stat-sex">--</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-title">Blood Group</span>
+                <span class="stat-value" id="stat-blood">--</span>
+            </div>
+        </div>
+
+        <div class="highlight-grid">
+            <div class="highlight-card" onclick="openView('type', 'prescription', '📝 My Prescriptions')">
+                <h3>Prescriptions</h3>
+                <div class="highlight-icon">📝</div>
+            </div>
+            <div class="highlight-card" onclick="openView('type', 'lab', '🔬 Lab Reports & Tests')">
+                <h3>Lab Reports & Tests</h3>
+                <div class="highlight-icon">🔬</div>
+            </div>
+        </div>
+
+        <h2>Medical Specialties</h2>
+        <div class="grid" id="category-grid">
+            <div class="cat-card" onclick="openView('category', 'orthopedics', '🦴 Orthopedics')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Bones, joints, muscles, fractures, back pain, and arthritis.</div></div>
+                <span class="cat-icon">🦴</span><span class="cat-name">Orthopedics</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'otorhinolaryngology', '👂 Otorhinolaryngology (ENT)')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Ear, nose, throat, sinuses, hearing loss, and vocal cords.</div></div>
+                <span class="cat-icon">👂</span><span class="cat-name">Otorhinolaryngology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'dentistry', '🦷 Dentistry')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Teeth, gums, jaw pain, cavities, and oral surgeries.</div></div>
+                <span class="cat-icon">🦷</span><span class="cat-name">Dentistry</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'neurology', '🧠 Neurology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Brain, spinal cord, nerves, migraines, stroke, and epilepsy.</div></div>
+                <span class="cat-icon">🧠</span><span class="cat-name">Neurology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'cardiology', '❤️ Cardiology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Heart, blood vessels, high blood pressure, and chest pain.</div></div>
+                <span class="cat-icon">❤️</span><span class="cat-name">Cardiology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'ophthalmology', '👁️ Ophthalmology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Eyes, vision issues, cataracts, glaucoma, and retinal disorders.</div></div>
+                <span class="cat-icon">👁️</span><span class="cat-name">Ophthalmology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'oncology', '🎗️ Oncology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Cancer diagnosis, tumors, chemotherapy, and radiation.</div></div>
+                <span class="cat-icon">🎗️</span><span class="cat-name">Oncology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'endocrinology', '🩸 Endocrinology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Hormones, diabetes, thyroid issues, and metabolism.</div></div>
+                <span class="cat-icon">🩸</span><span class="cat-name">Endocrinology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'gastroenterology', '🍏 Gastroenterology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Stomach, intestines, liver, digestion, acid reflux, and ulcers.</div></div>
+                <span class="cat-icon">🍏</span><span class="cat-name">Gastroenterology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'pulmonology', '🫁 Pulmonology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Lungs, breathing issues, asthma, COPD, and pneumonia.</div></div>
+                <span class="cat-icon">🫁</span><span class="cat-name">Pulmonology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'dermatology', '✋ Dermatology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Skin, hair, nails, severe acne, rashes, and eczema.</div></div>
+                <span class="cat-icon">✋</span><span class="cat-name">Dermatology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'urology', '💧 Urology & Nephrology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Kidneys, bladder, urinary tract infections, and prostate issues.</div></div>
+                <span class="cat-icon">💧</span><span class="cat-name">Urology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'pediatrics', '👶 Pediatrics')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Medical care for infants, children, and adolescents.</div></div>
+                <span class="cat-icon">👶</span><span class="cat-name">Pediatrics</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'gynecology', '🤰 Gynecology')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Women's reproductive health, menstrual issues, and pregnancy.</div></div>
+                <span class="cat-icon">🤰</span><span class="cat-name">Gynecology</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'psychiatry', '⚕️ Psychiatry')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Mental health, depression, anxiety, ADHD, and therapy.</div></div>
+                <span class="cat-icon">⚕️</span><span class="cat-name">Psychiatry</span>
+            </div>
+            
+            <div class="cat-card" onclick="openView('category', 'general', '📁 General Medicine')">
+                <div class="info-icon" onclick="event.stopPropagation()">i<div class="tooltip">Routine checkups, common fevers, flu, and primary care.</div></div>
+                <span class="cat-icon">📁</span><span class="cat-name">General Medicine</span>
+            </div>
+        </div>
+
+        <div class="table-container" id="recent-activity-container" style="display: none;">
+            <h2 id="recent-activity-title">Recent Activity</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date Produced</th>
+                        <th>Type</th>
+                        <th>Title</th>
+                        <th>Specialty</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="detail-view">
+        <button class="back-btn" onclick="showHome()">← Back to Dashboard</button>
+        <h2 id="cat-title">Category Name</h2>
+        
+        <div class="upload-panel" id="upload-container">
+            <div class="input-group" style="flex: 2;">
+                <input type="text" id="upload-title" placeholder="Document Title (e.g. Lab Results)">
+                <span class="hint-text">Required</span>
+            </div>
+            
+            <div class="input-group" style="flex: 1;">
+                <input type="date" id="doc-date" required>
+                <span class="hint-text">Date Produced</span>
+            </div>
+            
+            <div class="input-group" id="type-selector" style="flex: 1.5;">
+                <select id="doc-type" onchange="updateAcceptTypes()">
+                    <option value="prescription">Prescription (Image)</option>
+                    <option value="lab">Lab Report (PDF)</option>
+                    <optgroup label="Scans & Imagery">
+                        <option value="mri">MRI Scan (DICOM/JPG)</option>
+                        <option value="ct">CT Scan (DICOM/JPG)</option>
+                        <option value="xray">X-Ray (DICOM/JPG)</option>
+                        <option value="ultrasound">Ultrasound (JPG)</option>
+                    </optgroup>
+                </select>
+                <span class="hint-text">File Format</span>
+            </div>
+
+            <div class="input-group" id="category-selector" style="flex: 1.5;">
+                <select id="doc-category">
+                    <option value="orthopedics">Orthopedics</option>
+                    <option value="otorhinolaryngology">Otorhinolaryngology</option>
+                    <option value="dentistry">Dentistry</option>
+                    <option value="neurology">Neurology</option>
+                    <option value="cardiology">Cardiology</option>
+                    <option value="ophthalmology">Ophthalmology</option>
+                    <option value="oncology">Oncology</option>
+                    <option value="endocrinology">Endocrinology</option>
+                    <option value="gastroenterology">Gastroenterology</option>
+                    <option value="pulmonology">Pulmonology</option>
+                    <option value="dermatology">Dermatology</option>
+                    <option value="urology">Urology</option>
+                    <option value="pediatrics">Pediatrics</option>
+                    <option value="gynecology">Gynecology</option>
+                    <option value="psychiatry">Psychiatry</option>
+                    <option value="general" selected>General Medicine</option>
+                </select>
+                <span class="hint-text">Specialty</span>
+            </div>
+
+            <div class="input-group" style="flex: 1.5;">
+                <input type="file" id="upload-file" multiple>
+                <span class="hint-text">Select your file(s)</span>
+            </div>
+            
+            <button type="button" id="upload-btn" onclick="uploadFiles()" style="height: 42px;">Upload Record</button>
+        </div>
+
+        <div class="record-split-layout">
+            <div class="record-box">
+                <h3>📄 Prescriptions & Lab Reports</h3>
+                <table style="font-size: 14px;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Title</th>
+                            <th>Specialty</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="docs-table"></tbody>
+                </table>
+            </div>
+            
+            <div class="record-box">
+                <h3>🩻 Scans & Imagery</h3>
+                <table style="font-size: 14px;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Title</th>
+                            <th>Specialty</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scans-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="profile-modal" class="modal">
+    <div class="modal-content" style="max-width: 400px;"> <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px;">
+            <h2 style="margin: 0; font-size: 24px; color: var(--text);" id="modal-title">Authentication</h2>
+            <span class="close" onclick="closeModals()">×</span>
+        </div>
+        
+        <div id="auth-section">
+            <div style="display: flex; gap: 25px; margin-bottom: 25px; border-bottom: 2px solid #edf2f7;">
+                <span id="tab-login" style="cursor: pointer; font-weight: 700; color: var(--primary); font-size: 16px; border-bottom: 2px solid var(--primary); padding-bottom: 8px; margin-bottom: -2px; transition: all 0.2s;" onclick="setAuthMode('login')">Log In</span>
+                <span id="tab-register" style="cursor: pointer; font-weight: 500; color: var(--text-light); font-size: 16px; padding-bottom: 8px; margin-bottom: -2px; transition: all 0.2s;" onclick="setAuthMode('register')">Register</span>
+            </div>
+
+            <div class="form-group">
+                <label style="font-size: 13px; font-weight: 600; color: var(--text-light);">GMAIL ADDRESS <span style="color: #E53E3E;">*</span></label>
+                <input type="email" id="user-email" placeholder="you@gmail.com" style="background: #F8FAFC;">
+            </div>
+
+            <div id="register-fields" style="display: none;">
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-light);">FULL NAME <span style="color: #E53E3E;">*</span></label>
+                    <input type="text" id="user-name" placeholder="John Doe" style="background: #F8FAFC;">
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-light);">AGE <span style="color: #E53E3E;">*</span></label>
+                        <input type="number" id="user-age" placeholder="21" style="background: #F8FAFC;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-light);">SEX <span style="color: #E53E3E;">*</span></label>
+                        <select id="user-sex" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e0; background: #F8FAFC; box-sizing: border-box;">
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-light);">BLOOD GROUP <span style="color: #E53E3E;">*</span></label>
+                    <input type="text" id="user-blood" placeholder="e.g. O+" style="background: #F8FAFC;">
+                </div>
+            </div>
+            
+            <button id="send-otp-btn" class="action-btn" style="width: 100%; background: var(--primary); color: white; justify-content: center; height: 48px; font-size: 16px; margin-top: 15px; box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);" onclick="requestOTP()">Continue</button>
+        </div>
+
+        <div id="logged-in-section" style="display: none; text-align: center;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #8B5CF6); color: white; font-size: 32px; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" id="profile-avatar-large">U</div>
+            
+            <h3 style="margin: 0 0 5px; color: var(--text); font-size: 22px;" id="display-name"></h3>
+            <p style="color: var(--text-light); margin: 0 0 25px; font-size: 14px;" id="display-email"></p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; background: #F8FAFC; padding: 15px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #E2E8F0;">
+                <div style="text-align: center;">
+                    <span style="display:block; font-size:11px; color:var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Age</span>
+                    <strong id="display-age" style="font-size: 18px; color: var(--text);"></strong>
+                </div>
+                <div style="width: 1px; background: #cbd5e0;"></div>
+                <div style="text-align: center;">
+                    <span style="display:block; font-size:11px; color:var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Sex</span>
+                    <strong id="display-sex" style="font-size: 18px; color: var(--text);"></strong>
+                </div>
+                <div style="width: 1px; background: #cbd5e0;"></div>
+                <div style="text-align: center;">
+                    <span style="display:block; font-size:11px; color:var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Blood</span>
+                    <strong id="display-blood" style="font-size: 18px; color: #E53E3E;"></strong>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="action-btn" style="flex: 1; justify-content: center; border: 1px solid #cbd5e0; background: white; color: var(--text); height: 42px;" onclick="logout()">Sign Out</button>
+                <button class="action-btn delete" style="flex: 1; justify-content: center; background: #FFF5F5; color: #E53E3E; border: 1px solid #FEB2B2; height: 42px;" onclick="deleteAccount()">Delete Account</button>
+            </div>
+        </div>
+
+        <div id="otp-section" style="display: none; text-align: center; padding: 10px 0;">
+            <div style="font-size: 40px; margin-bottom: 10px;">✉️</div>
+            <h3 style="margin: 0 0 10px; color: var(--text);">Check your inbox</h3>
+            <p style="color: var(--text-light); font-size: 14px; margin-bottom: 25px;">We sent a 6-digit secure code to your email.</p>
+            
+            <div class="form-group">
+                <input type="text" id="otp-input" placeholder="• • • • • •" style="font-size: 28px; text-align: center; letter-spacing: 12px; font-weight: bold; padding: 15px; background: #F8FAFC; border: 2px solid #E2E8F0;">
+            </div>
+            
+            <button id="verify-otp-btn" class="action-btn" style="width: 100%; background: #38A169; color: white; margin-bottom: 10px; justify-content: center; height: 48px; font-size: 16px; box-shadow: 0 4px 6px rgba(56, 161, 105, 0.2);" onclick="verifyOTP()">Secure Login</button>
+            <button class="action-btn" style="width: 100%; background: transparent; color: var(--text-light); justify-content: center;" onclick="resetProfileModal()">← Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="viewer-modal" class="modal">
+    <div class="modal-content modal-large">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 id="viewer-title" style="margin: 0; color: var(--text);">Document Viewer</h2>
+            <span class="close" onclick="closeModals()">×</span>
+        </div>
+        
+        <div class="split-layout">
+            <div class="viewer-left">
+                <div id="viewer-loading" style="color: white; position: absolute;">Loading secure document...</div>
+                <iframe id="pdf-viewer"></iframe>
+                <img id="img-viewer" src="">
+                <div id="dicom-tools" class="dicom-tools">
+                    <div id="slice-counter">1/1</div>
+                    <input type="range" id="slice-slider" min="0" value="0" orient="vertical" oninput="updateDicomSlice()">
+                </div>
+            </div>
+            
+            <div class="viewer-right">
+                <h2 style="margin-top: 0; color: var(--text); font-size: 20px; display: flex; align-items: center; gap: 8px;">🧠 AI Insights</h2>
+                
+                <div id="ai-controls">
+                    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">Use Gemini 2.5 to decipher handwriting, summarize complex labs, or analyze medical imagery.</p>
+                    <button class="action-btn ai" style="width: 100%; justify-content: center; padding: 12px;" onclick="analyzeCurrentRecord()">✨ Generate AI Report</button>
+                </div>
+                
+                <div id="ai-loading" style="text-align: center; margin: 30px 0; color: var(--primary); font-weight: bold; display: none;">Analyzing medical document...</div>
+                
+                <div id="ai-report" class="report-content" style="display: none;"></div>
+                <button id="download-report-btn" class="download-btn" onclick="downloadReport()">⬇️ Download AI Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
