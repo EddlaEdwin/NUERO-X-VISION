@@ -1,0 +1,10 @@
+# Security & Passwords
+.env
+
+# Local Environment & Cache
+.venv/
+__pycache__/
+
+# Isolated Physical Patient File Vaults
+health_vault/
+scan_vault/
